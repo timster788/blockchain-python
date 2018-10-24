@@ -15,7 +15,7 @@ def get_last_blockchain_value():
 # The optional one is optional because it has a default value => [1]
 
 
-def add_transaction(sender, recipent, amount=1.0):
+def add_transaction(recipient, sender=owner, amount=1.0):
     """ Append a new value as well as the last blockchain value to the blockchain.
 
     Arguments:
@@ -25,10 +25,10 @@ def add_transaction(sender, recipent, amount=1.0):
     """
     transaction = {
         'sender': sender,
-        'recipient': recipent,
+        'recipient': recipient,
         'amount': amount
     }
-    open_transactions.append()
+    open_transactions.append(transaction)
 
 
 # adds a new block to block chain
@@ -39,7 +39,7 @@ def mine_block():
 def get_transaction_value():
     """ Returns the input of the user (a new transaction amount) as a float. """
     # Get the user input, transform it from a string to a float and store it in user_input
-    tx_recipient = input('Enter the recipient of the transaction')
+    tx_recipient = input('Enter the recipient of the transaction:')
     tx_amount = float(input('Your transaction amount please: '))
     return (tx_recipient, tx_amount)
 
@@ -61,17 +61,25 @@ def print_blockchain_elements():
 def verify_chain():
     # block_index = 0
     is_valid = True
-    for block_index in range(len(blockchain))
-    # for block in blockchain:
-    #     if block_index == 0:
-    #         block_index += 1
-    #         continue
-    #     elif block[0] == blockchain[block_index - 1]:
-    #         is_valid = True
-    #     else:
-    #         is_valid = False
-    #         break
-    #     block_index += 1
+    for block_index in range(len(blockchain)):
+        if block_index == 0:
+            # If we're checking the first block, we should skip the iteration (since there's no previous block)
+            continue
+        # Check the previous block (the entire one) vs the first element of the current block
+        elif blockchain[block_index][0] == blockchain[block_index - 1]:
+            is_valid = True
+        else:
+            is_valid = False
+        # for block in blockchain:
+        #     if block_index == 0:
+        #         block_index += 1
+        #         continue
+        #     elif block[0] == blockchain[block_index - 1]:
+        #         is_valid = True
+        #     else:
+        #         is_valid = False
+        #         break
+        #     block_index += 1
     return is_valid
 
 
@@ -86,7 +94,10 @@ while waiting_for_input:
     user_choice = get_user_choice()
     if user_choice == '1':
         tx_data = get_transaction_value()
-        add_transaction(tx_amount, get_last_blockchain_value())
+        recipient, amount = tx_data
+        # add transaction amount to the blockchain
+        add_transaction(recipient, amount=amount)
+        print(open_transactions)
     elif user_choice == '2':
         print_blockchain_elements()
 
